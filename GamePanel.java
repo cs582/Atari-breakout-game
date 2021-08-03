@@ -8,8 +8,8 @@ public class GamePanel extends JPanel implements Runnable {
 	static final int GAME_HEIGHT = (int)(GAME_WIDTH * 0.5555);
 	static final Dimension SCREEN_SIZE = new Dimension(GAME_WIDTH, GAME_HEIGHT);
 	static final int BALL_DIAMETER = 15;
-	static final int PADDLE_WIDTH = 100;
-	static final int PADDLE_HEIGHT = (int)(PADDLE_WIDTH*0.15);
+	static final int PADDLE_WIDTH = 150;
+	static final int PADDLE_HEIGHT = (int)(PADDLE_WIDTH*0.1);
 	static final int N_BLOCKS_PER_LINE = 15;
 	static final int N_LINES = 6;
 	static final int BLOCK_WIDTH = (int)(GAME_WIDTH/N_BLOCKS_PER_LINE);
@@ -49,11 +49,10 @@ public class GamePanel extends JPanel implements Runnable {
 	
 	public void newBlocks() {
 		int start = 75;
-		String[] colors = {"Red","Orange","Yellow","Green","Aqua","Blue"};
 		blocks = new Block[N_LINES][N_BLOCKS_PER_LINE];
 		for(int i = 0; i < N_LINES; i++) {
 			for(int j = 0; j < N_BLOCKS_PER_LINE; j++) {
-				blocks[i][j] = new Block(BLOCK_WIDTH*j, start+(BLOCK_HEIGHT*i), BLOCK_WIDTH, BLOCK_HEIGHT, colors[i]);
+				blocks[i][j] = new Block(BLOCK_WIDTH*j, start+(BLOCK_HEIGHT*i), BLOCK_WIDTH, BLOCK_HEIGHT, i);
 			}
 		}
 	}
@@ -109,10 +108,10 @@ public class GamePanel extends JPanel implements Runnable {
 			ball.setYDirection(-ball.yVelocity);
 		}
 		if (ball.x <= 0) {
-			ball.setXDirection(-ball.xVelocity);
+			ball.setXDirection(Math.abs(ball.xVelocity));
 		}
 		if (ball.x >= GAME_WIDTH-BALL_DIAMETER) {
-			ball.setXDirection(-ball.xVelocity);
+			ball.setXDirection(-Math.abs(ball.xVelocity));
 		}
 		
 		//bounce ball off blocks
@@ -145,7 +144,6 @@ public class GamePanel extends JPanel implements Runnable {
 							if (ball.xVelocity > 0) ball.xVelocity++;
 							else 					ball.xVelocity--;
 						}
-						System.out.println("Vx = " + ball.xVelocity + ", Vy = " + ball.yVelocity);
 						score.player += blocks[i][j].points;
 						curNumberOfBlocks--;
 					}
@@ -163,10 +161,14 @@ public class GamePanel extends JPanel implements Runnable {
 					ball.xVelocity = Math.abs(ball.xVelocity);
 				if (ball.x+(BALL_DIAMETER/2) < paddle.x+PADDLE_WIDTH/2)
 					ball.xVelocity = -Math.abs(ball.xVelocity);
-				if (Math.abs(ball.yVelocity) >= 5 || Math.abs(ball.yVelocity) <= 2) {
+				if (ball.x+(BALL_DIAMETER/2) >= paddle.x+5*PADDLE_WIDTH/6) {
+					ball.yVelocity = -Math.abs(ball.xVelocity-1);
+				}
+				if (ball.x+(BALL_DIAMETER/2) <= paddle.x+PADDLE_WIDTH/6) {
+					ball.yVelocity = -Math.abs(ball.xVelocity-1);
+				}
+				if (ball.x+(BALL_DIAMETER/2) >= paddle.x+PADDLE_WIDTH/6 && ball.x+(BALL_DIAMETER/2) <= paddle.x+5*PADDLE_WIDTH/6) {
 					ball.yVelocity = -Math.abs(ball.xVelocity);
-				} else {
-					ball.yVelocity = -Math.abs(ball.yVelocity+random.nextInt(2));
 				}
 				ball.setXDirection(ball.xVelocity);
 				ball.setYDirection(ball.yVelocity);
@@ -175,10 +177,10 @@ public class GamePanel extends JPanel implements Runnable {
 		
 		//Stops paddle at edges
 		if(paddle.x <= 0) {
-			paddle.x = 1;
+			paddle.x = 0;
 		}
 		if(paddle.x >= (GAME_WIDTH-PADDLE_WIDTH)) {
-			paddle.x = GAME_WIDTH-PADDLE_WIDTH-1;
+			paddle.x = GAME_WIDTH-PADDLE_WIDTH;
 		}
 		
 		//player loses the game and creates a new ball

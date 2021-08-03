@@ -7,7 +7,7 @@ public class Ball extends Rectangle {
 	Random random;
 	int xVelocity;
 	int yVelocity;
-	int speed = 3;
+	int speed = 2;
 	Color c_ball = new Color(0x9053a6);
 	
 	Ball(int x, int y, int width, int height) {

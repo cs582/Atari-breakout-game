@@ -15,15 +15,15 @@ public class Block extends Rectangle {
 	int points;
 	boolean destroyed = false;
 	
-	Block(int x, int y, int BLOCK_WIDTH, int BLOCK_HEIGHT, String color){
+	Block(int x, int y, int BLOCK_WIDTH, int BLOCK_HEIGHT, int color){
 		super(x, y, BLOCK_WIDTH, BLOCK_HEIGHT);
 		switch(color){
-			case "Red":		c_block = c_re; points = 7; break;
-			case "Orange":	c_block = c_or; points = 7; break;
-			case "Yellow":	c_block = c_yw; points = 4; break;
-			case "Green":	c_block = c_gr; points = 4; break;
-			case "Aqua":	c_block = c_aq; points = 1; break;
-			case "Blue":	c_block = c_bl; points = 1; break;
+			case 0:		c_block = c_re; points = 7; break;
+			case 1:	c_block = c_or; points = 7; break;
+			case 2:	c_block = c_yw; points = 4; break;
+			case 3:	c_block = c_gr; points = 4; break;
+			case 4:	c_block = c_aq; points = 1; break;
+			case 5:	c_block = c_bl; points = 1; break;
 		}
 	}
 
